@@ -1,0 +1,9 @@
+- name: Ensure cUrl is installed.
+  win_chocolatey:
+    name: curl
+    state: present
+
+- name: Ensure WinRAR is installed.
+  win_chocolatey:
+    name: winrar
+    state: present

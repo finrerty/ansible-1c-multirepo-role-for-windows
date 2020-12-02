@@ -1,0 +1,25 @@
+- name: Create Directory for Installation Media
+  win_file:
+    path: C:\Temp\{{ item }}\{{ platform_architecture }}
+    state: directory
+  loop: '{{ platform_version }}'
+
+- name: Download 1C Platform Installation Media
+  win_get_url:
+    url: '{{ download_url }}/{{ item.0 }}/{{ platform_architecture }}/{{ item.1 }}'
+    dest: C:\Temp\{{ item.0 }}\{{ platform_architecture }}\
+    url_username: '{{ url_username }}'
+    url_password: '{{ url_password }}'
+  with_together:
+    - '{{ platform_version }} '
+    - '{{ setup_archive_filename }}'
+  register: new_download
+
+- name: UnRAR Installation Media
+  win_shell: '"C:\Program Files\WinRAR\WinRAR.exe" x -o+ C:\Temp\{{ item.0 }}\{{ platform_architecture }}\{{ item.1 }} C:\Temp\{{ item.0 }}\{{ platform_architecture }}'
+  args:
+    executable: cmd
+  with_together:
+    - '{{ platform_version }} '
+    - '{{ setup_archive_filename }}'
+  when: new_download.changed

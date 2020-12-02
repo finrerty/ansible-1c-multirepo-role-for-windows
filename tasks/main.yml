@@ -1,0 +1,5 @@
+- include: add_powershell_modules.yml
+- include: install_packages.yml
+- include: download_media.yml
+- include: install_1c.yml
+- include: configure_firewall.yml

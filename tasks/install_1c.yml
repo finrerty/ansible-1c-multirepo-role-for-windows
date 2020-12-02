@@ -1,0 +1,31 @@
+- name: Create Directory for repositories
+  win_file:
+    path: C:\repositories\Store_{{ item }}
+    state: directory
+  loop: '{{ repository_port }}'
+
+- name: Install 1C Enterprise Repository Server
+  win_package:
+    path: C:\Temp\{{ item }}\{{ platform_architecture }}\setup.exe
+    product_id: '{24877BC3-0D30-4F0E-A840-EDB9DBB30D47}'
+    arguments: 'DESIGNERALLCLIENTS=0 THINCLIENTFILE=0 THINCLIENT=0 WEBSERVEREXT=0 SERVER=0 CONFREPOSSERVER=1 CONVERTER77=0 SERVERCLIENT=0 LANGUAGES=RU'
+  loop: '{{ platform_version }}'
+  when: new_download.changed
+
+- name: Create a new 1c repository service
+  win_service:
+    name: '{{ item.0 }}'
+    path: '{{ installation_path }}\{{ item.1 }}\bin\crserver.exe -srvc -port {{ item.2 }} -d C:\repositories\Store_{{ item.2 }}'
+    start_mode: auto
+  register: files_created
+  with_together:
+    - '{{ repo_srv_name }}'
+    - '{{ platform_version }} '
+    - '{{ repository_port }}'
+
+- name: Restart Updated Service
+  win_service:
+    name: '{{ item.name }}'
+    state: restarted
+  when: item.changed == true
+  with_items: '{{files_created.results}}'

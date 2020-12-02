@@ -1,0 +1,12 @@
+- name: Firewall | Allow 1C for instance
+  win_dsc:
+    resource_name: xFirewall
+    Name: "Allow 1C Ports connection"
+    Localport: '{{ item }}'
+    Protocol: "TCP"
+    Ensure: present
+    Enabled: True
+    Direction: "Inbound"
+    Action: Allow
+    Description: "Open 1C_Ports"
+  loop: '{{ repository_port }}'

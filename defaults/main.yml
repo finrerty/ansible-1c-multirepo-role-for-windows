@@ -1,0 +1,17 @@
+url_username: %your_username%
+url_password: %your_password%
+download_url: https://downloads.1c.ru/
+platform_architecture: 64-bit
+platform_version:
+  - 8.3.18.1208
+  - 8.3.14.1854
+setup_archive_filename:
+  - windows64full_8_3_18_1208.rar
+  - windows64full_8_3_14_1854.rar
+repo_srv_name: 
+  - '1C:Enterprise 8.3 Configuration Repository Server'
+  - '2542_1C:Enterprise 8.3 Configuration Repository Server'
+repository_port: 
+  - 1542
+  - 2542
+installation_path: C:\Program Files\1cv8
